@@ -3,53 +3,743 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Roustuf - Coming Soon</title>
+    <title>Search Cars - Roustuf AutoConnect</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+    />
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html,
       body {
-        font-family: Arial, sans-serif;
+        width: 100%;
+        overflow-x: hidden; /* Critical fix */
         background-color: #f4f4f4;
-        text-align: center;
-        padding: 50px;
+        scrollbar-width: none; /* Firefox */
+        background: linear-gradient(to right, #f1f4f9, #eef1f7);
       }
-      .logo {
-        width: 120px;
-        height: auto;
-        margin-bottom: 20px;
+
+      body::-webkit-scrollbar {
+        display: none; /* Chrome/Safari */
       }
+
+      .container-fluid,
       .container {
-        background: white;
-        padding: 30px;
-        border-radius: 8px;
-        max-width: 500px;
-        margin: auto;
-        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        margin: 0 auto;
       }
-      h1 {
-        color: #333;
+
+      .row {
+        margin-left: 0;
+        margin-right: 0;
       }
-      p {
-        color: #666;
+
+      .card {
+        border-radius: 15px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+      }
+
+      .form-outline {
+        margin-bottom: 1rem;
+      }
+
+      .bg-dark-section {
+        background-color: #212529;
+      }
+
+      .dashboard-card {
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      }
+      .car-card {
+        border-left: 5px solid #0d6efd;
       }
     </style>
   </head>
   <body>
-    <div class="container">
-      <h1>Roustuf</h1>
-      <p><strong>Premium Car Rentals – Coming Soon!</strong></p>
-      <p>
-        At Roustuf, we’re building a seamless car rental booking platform to
-        make your journeys easier and more enjoyable. Whether you need a ride
-        for a quick trip, a weekend getaway, or a long adventure, we’ll have the
-        perfect vehicle for you at the best price.
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container d-flex justify-content-between">
+          <!-- Brand: Left Side -->
+          <a class="navbar-brand fw-bold me-auto" href="#"
+            >Roustuf AutoConnect</a
+          >
+
+          <!-- Toggler for mobile -->
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <!-- Right Side Links -->
+          <div
+            class="collapse navbar-collapse justify-content-end"
+            id="navbarNav"
+          >
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link active" href="#">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#search">Search</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#popular-cars">Cars</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#locations">Locations</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#reviews">Reviews</a>
+              </li>
+              <li class="nav-item">
+                <a class="btn btn-primary ms-lg-3" href="#">Login / Signup</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <section class="hero-section">
+      <div class="hero-overlay">
+        <div class="container">
+          <div class="text-center mb-4 text-white">
+            <h1 class="display-5 fw-bold">Find Your Perfect Ride</h1>
+            <p class="lead">
+              Book rental cars easily, quickly, and affordably!
+            </p>
+          </div>
+
+          <div class="search-box p-4 bg-white shadow rounded">
+            <div class="mb-3">
+              <h5 class="fw-bold text-dark mb-1">Start Your Journey</h5>
+              <p class="text-muted small mb-3">
+                Book a ride that fits your schedule and style
+              </p>
+            </div>
+
+            <form>
+              <div class="row g-3 align-items-center">
+                <div class="col-md-4">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Enter Location"
+                  />
+                </div>
+
+                <!-- Date input with label like placeholder -->
+                <div class="col-md-3 position-relative">
+                  <input type="date" class="form-control" id="pickup-date" />
+                  <label
+                    for="pickup-date"
+                    class="form-label text-muted position-absolute"
+                    style="top: -20px; left: 10px; font-size: 12px"
+                    >Pickup Date</label
+                  >
+                </div>
+
+                <div class="col-md-3">
+                  <select class="form-select">
+                    <option selected>Select Car Type</option>
+                    <option value="suv">SUV</option>
+                    <option value="sedan">Sedan</option>
+                    <option value="hatchback">Hatchback</option>
+                    <option value="luxury">Luxury</option>
+                  </select>
+                </div>
+
+                <div class="col-md-2">
+                  <button type="submit" class="btn btn-primary w-100">
+                    Search
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="container my-5">
+      <h2 class="text-center mb-2">Popular Car Categories</h2>
+      <p class="text-center text-muted mb-4">
+        Explore our top trending car types trusted by thousands of customers
+        across India.
       </p>
-      <p>
-        <em
-          >Our website is under development and will be launching soon. Stay
-          tuned!</em
-        >
+      <div class="row g-4 text-center">
+        <!-- SUV -->
+        <div class="col-md-3">
+          <div class="card h-100 shadow position-relative">
+            <!-- Wishlist Icon -->
+            <button
+              class="btn btn-light wishlist-btn position-absolute top-0 end-0 m-2 p-1 border-0 rounded-circle"
+            >
+              <i class="far fa-heart"></i>
+            </button>
+
+            <img src="testingcar.png" class="card-img-top" alt="SUV" />
+            <div class="card-body">
+              <h5 class="card-title">Toyota Fortuner</h5>
+              <p class="text-muted mb-1">📍 Delhi</p>
+              <p><strong>₹4500/day</strong> • Diesel</p>
+              <a href="#" class="btn btn-sm btn-primary">Book Now</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sedan -->
+        <div class="col-md-3">
+          <div class="card h-100 shadow position-relative">
+            <button
+              class="btn btn-light wishlist-btn position-absolute top-0 end-0 m-2 p-1 border-0 rounded-circle"
+            >
+              <i class="far fa-heart"></i>
+            </button>
+
+            <img src="testingcar.png" class="card-img-top" alt="Sedan" />
+            <div class="card-body">
+              <h5 class="card-title">Honda City</h5>
+              <p class="text-muted mb-1">📍 Bangalore</p>
+              <p><strong>₹2200/day</strong> • Petrol</p>
+              <a href="#" class="btn btn-sm btn-primary">Book Now</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hatchback -->
+        <div class="col-md-3">
+          <div class="card h-100 shadow position-relative">
+            <button
+              class="btn btn-light wishlist-btn position-absolute top-0 end-0 m-2 p-1 border-0 rounded-circle"
+            >
+              <i class="far fa-heart"></i>
+            </button>
+
+            <img src="testingcar.png" class="card-img-top" alt="Hatchback" />
+            <div class="card-body">
+              <h5 class="card-title">Maruti Swift</h5>
+              <p class="text-muted mb-1">📍 Mumbai</p>
+              <p><strong>₹1500/day</strong> • Petrol</p>
+              <a href="#" class="btn btn-sm btn-primary">Book Now</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Luxury -->
+        <div class="col-md-3">
+          <div class="card h-100 shadow position-relative">
+            <button
+              class="btn btn-light wishlist-btn position-absolute top-0 end-0 m-2 p-1 border-0 rounded-circle"
+            >
+              <i class="far fa-heart"></i>
+            </button>
+
+            <img src="testingcar.png" class="card-img-top" alt="Luxury Car" />
+            <div class="card-body">
+              <h5 class="card-title">BMW 5 Series</h5>
+              <p class="text-muted mb-1">📍 Hyderabad</p>
+              <p><strong>₹8500/day</strong> • Diesel</p>
+              <a href="#" class="btn btn-sm btn-primary">Book Now</a>
+            </div>
+          </div>
+        </div>
+        <div class="text-center mt-4">
+          <a href="/all-cars.html" class="btn btn-outline-primary"
+            >View All Cars</a
+          >
+        </div>
+      </div>
+    </section>
+
+    <section class="container my-5" id="top-locations">
+      <h2 class="text-center mb-2">Top Locations</h2>
+      <p class="text-center text-muted mb-5">
+        Discover rental cars in the most popular cities across India.
       </p>
-      <hr />
-      <p><strong>Contact us:</strong> kaliaharsh24@gmail.com</p>
-    </div>
+
+      <div class="row g-4 text-center">
+        <!-- Delhi -->
+        <div class="col-md-3">
+          <div class="card h-100 shadow-sm border-0 hover-shadow">
+            <img src="testingcar.png" class="card-img-top" alt="Delhi" />
+            <div class="card-body">
+              <h5 class="card-title mb-1">Delhi</h5>
+              <p class="text-muted small">120+ Cars Available</p>
+              <a
+                href="/search?location=delhi"
+                class="btn btn-sm btn-outline-primary"
+              >
+                Explore Cars
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bangalore -->
+        <div class="col-md-3">
+          <div class="card h-100 shadow-sm border-0 hover-shadow">
+            <img src="testingcar.png" class="card-img-top" alt="Bangalore" />
+            <div class="card-body">
+              <h5 class="card-title mb-1">Bangalore</h5>
+              <p class="text-muted small">95+ Cars Available</p>
+              <a
+                href="/search?location=bangalore"
+                class="btn btn-sm btn-outline-primary"
+              >
+                Explore Cars
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mumbai -->
+        <div class="col-md-3">
+          <div class="card h-100 shadow-sm border-0 hover-shadow">
+            <img src="testingcar.png" class="card-img-top" alt="Mumbai" />
+            <div class="card-body">
+              <h5 class="card-title mb-1">Mumbai</h5>
+              <p class="text-muted small">110+ Cars Available</p>
+              <a
+                href="/search?location=mumbai"
+                class="btn btn-sm btn-outline-primary"
+              >
+                Explore Cars
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hyderabad -->
+        <div class="col-md-3">
+          <div class="card h-100 shadow-sm border-0 hover-shadow">
+            <img src="testingcar.png" class="card-img-top" alt="Hyderabad" />
+            <div class="card-body">
+              <h5 class="card-title mb-1">Hyderabad</h5>
+              <p class="text-muted small">80+ Cars Available</p>
+              <a
+                href="/search?location=hyderabad"
+                class="btn btn-sm btn-outline-primary"
+              >
+                Explore Cars
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-light py-5">
+      <div class="container">
+        <h2 class="text-center mb-4">Why Roustuf AutoConnect?</h2>
+        <div class="row text-center">
+          <!-- Verified Dealers -->
+          <div class="col-md-3">
+            <i class="bi bi-shield-check fs-2 text-primary"></i>
+            <h5 class="mt-2">Verified Dealers</h5>
+            <p class="text-muted small">
+              All showrooms are verified for authenticity and reliability.
+            </p>
+          </div>
+
+          <!-- Best Prices -->
+          <div class="col-md-3">
+            <i class="bi bi-currency-rupee fs-2 text-primary"></i>
+            <h5 class="mt-2">Best Prices</h5>
+            <p class="text-muted small">
+              Compare prices across cities and find affordable rentals.
+            </p>
+          </div>
+
+          <!-- Instant Booking -->
+          <div class="col-md-3">
+            <i class="bi bi-lightning-charge fs-2 text-primary"></i>
+            <h5 class="mt-2">Instant Booking</h5>
+            <p class="text-muted small">
+              Book your car in seconds with our fast and secure platform.
+            </p>
+          </div>
+
+          <!-- Wide Variety -->
+          <div class="col-md-3">
+            <i class="bi bi-car-front fs-2 text-primary"></i>
+            <h5 class="mt-2">Wide Variety</h5>
+            <p class="text-muted small">
+              Choose from SUVs, Sedans, Hatchbacks, and Luxury cars.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-light py-5">
+      <div class="container">
+        <h2 class="text-center mb-5">What Our Customers Say</h2>
+        <div class="row g-4">
+          <!-- Review 1 -->
+          <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0 p-3">
+              <div class="d-flex align-items-center mb-3">
+                <img
+                  src="https://i.pravatar.cc/60?img=12"
+                  class="rounded-circle me-3"
+                  alt="User"
+                />
+                <div>
+                  <h6 class="mb-0">Aman Verma</h6>
+                  <small class="text-muted">Delhi</small>
+                </div>
+              </div>
+              <p class="fst-italic">
+                “AutoConnect made booking so easy. Got a clean SUV at a great
+                price. Highly recommend it!”
+              </p>
+              <div class="text-warning">★★★★☆</div>
+            </div>
+          </div>
+
+          <!-- Review 2 -->
+          <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0 p-3">
+              <div class="d-flex align-items-center mb-3">
+                <img
+                  src="https://i.pravatar.cc/60?img=32"
+                  class="rounded-circle me-3"
+                  alt="User"
+                />
+                <div>
+                  <h6 class="mb-0">Shruti Singh</h6>
+                  <small class="text-muted">Bangalore</small>
+                </div>
+              </div>
+              <p class="fst-italic">
+                “Had a smooth booking experience. Support team was quick and
+                helpful. Would book again.”
+              </p>
+              <div class="text-warning">★★★★★</div>
+            </div>
+          </div>
+
+          <!-- Review 3 -->
+          <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0 p-3">
+              <div class="d-flex align-items-center mb-3">
+                <img
+                  src="https://i.pravatar.cc/60?img=45"
+                  class="rounded-circle me-3"
+                  alt="User"
+                />
+                <div>
+                  <h6 class="mb-0">Rohan Mehta</h6>
+                  <small class="text-muted">Mumbai</small>
+                </div>
+              </div>
+              <p class="fst-italic">
+                “Impressed with the car quality and punctuality. Found exactly
+                what I was looking for!”
+              </p>
+              <div class="text-warning">★★★★☆</div>
+            </div>
+          </div>
+          <div class="text-end mt-4">
+            <a
+              href="/reviews.html"
+              class="text-decoration-none text-primary fw-semibold"
+            >
+              View All Reviews →
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white pt-5 pb-4">
+      <div class="container text-md-left">
+        <div class="row">
+          <!-- About -->
+          <div class="col-md-4">
+            <h5 class="fw-bold mb-3">Roustuf AutoConnect</h5>
+            <p>
+              India’s trusted car rental platform. Book verified vehicles from
+              top cities with ease and confidence.
+            </p>
+          </div>
+
+          <!-- Quick Links -->
+          <div class="col-md-4">
+            <h6 class="fw-bold mb-3">Quick Links</h6>
+            <ul class="list-unstyled">
+              <li>
+                <a href="#" class="text-white text-decoration-none">Home</a>
+              </li>
+              <li>
+                <a href="#search" class="text-white text-decoration-none"
+                  >Search Cars</a
+                >
+              </li>
+              <li>
+                <a href="#locations" class="text-white text-decoration-none"
+                  >Top Locations</a
+                >
+              </li>
+              <li>
+                <a href="#reviews" class="text-white text-decoration-none"
+                  >Reviews</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <!-- Contact -->
+          <div class="col-md-4">
+            <h6 class="fw-bold mb-3">Contact Us</h6>
+            <p>Email: support@roustufautoconnect.com</p>
+            <p>Phone: +91 98765 43210</p>
+            <p>Location: Chandigarh, India</p>
+          </div>
+        </div>
+
+        <hr class="my-4" />
+
+        <div class="text-center">
+          <p class="mb-0">
+            &copy; 2025 Roustuf AutoConnect. All rights reserved.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      function searchShowroomOnGoogle() {
+        const name = document.getElementById("showroomName").textContent.trim();
+        const location = document
+          .getElementById("showroomLocation")
+          .textContent.trim();
+
+        if (!name || !location) {
+          alert("Showroom name or location is missing!");
+          return;
+        }
+
+        const query = encodeURIComponent(`${name} ${location}`);
+        const googleSearchURL = `https://www.google.com/search?q=${query}`;
+        window.open(googleSearchURL, "_blank");
+      }
+
+      function showBookings(type) {
+        const sections = ["paid", "cancelled", "pending"];
+        sections.forEach((id) => {
+          document.getElementById(id).classList.add("d-none");
+        });
+        document.getElementById(type).classList.remove("d-none");
+      }
+
+      function showPayouts(type) {
+        const sections = ["completed", "pendingPayouts"];
+        sections.forEach((id) => {
+          document.getElementById(id).classList.add("d-none");
+        });
+        document
+          .getElementById(type === "completed" ? "completed" : "pendingPayouts")
+          .classList.remove("d-none");
+      }
+      function filterCars() {
+        const input = document
+          .getElementById("carSearchInput")
+          .value.toLowerCase();
+        const cars = document.querySelectorAll(".car-item");
+
+        cars.forEach((car) => {
+          const title = car.querySelector("h6").innerText.toLowerCase();
+          car.style.display = title.includes(input) ? "block" : "none";
+        });
+      }
+
+      let earningsChart;
+
+      const chartData = {
+        "2025-07": [800, 1200, 1600, 2000],
+        "2025-06": [600, 900, 1100, 1500],
+        "2025-05": [500, 700, 1200, 1300],
+        "2025-04": [400, 800, 950, 1200],
+        "2025-03": [300, 500, 700, 900],
+      };
+
+      function renderChart(month) {
+        const ctx = document.getElementById("earningsChart").getContext("2d");
+        const data = chartData[month] || [0, 0, 0, 0];
+
+        const labels = ["Week 1", "Week 2", "Week 3", "Week 4"];
+
+        if (earningsChart) {
+          earningsChart.destroy();
+        }
+
+        earningsChart = new Chart(ctx, {
+          type: "bar",
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                label: `Earnings (₹) - ${month}`,
+                data: data,
+                backgroundColor: "#4e73df",
+                borderRadius: 5,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            scales: {
+              y: {
+                beginAtZero: true,
+              },
+            },
+          },
+        });
+      }
+
+      function updateEarningsChart() {
+        const selectedMonth = document.getElementById("monthSelector").value;
+        renderChart(selectedMonth);
+      }
+
+      // Initial chart load
+      renderChart("2025-07");
+    </script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const manualRegisterBtn = document.getElementById(
+          "manual-register-btn"
+        );
+
+        if (manualRegisterBtn) {
+          manualRegisterBtn.addEventListener("click", () => {
+            const triggerTab = new bootstrap.Tab(
+              document.querySelector("#pills-register-tab")
+            );
+            triggerTab.show();
+          });
+        }
+
+        const loginBtn = document.getElementById("manual-login-btn");
+
+        if (loginBtn) {
+          loginBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            const loginTab = new bootstrap.Tab(
+              document.querySelector("#pills-login-tab")
+            );
+            loginTab.show();
+          });
+        }
+
+        const requestButtons = document.querySelectorAll(
+          ".request-booking-btn"
+        );
+        const modalCarName = document.getElementById("modalCarName");
+        const modalCarPrice = document.getElementById("modalCarPrice");
+        const rentalDays = document.getElementById("rentalDays");
+        const totalPrice = document.getElementById("totalPrice");
+
+        requestButtons.forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const car = btn.getAttribute("data-car");
+            const price = parseInt(btn.getAttribute("data-price"));
+
+            modalCarName.value = car;
+            modalCarPrice.value = price;
+            rentalDays.value = "";
+            totalPrice.innerText = "0";
+          });
+        });
+
+        rentalDays.addEventListener("input", () => {
+          const pricePerDay = parseInt(modalCarPrice.value);
+          const days = parseInt(rentalDays.value);
+          if (!isNaN(days) && days > 0) {
+            totalPrice.innerText = pricePerDay * days;
+          } else {
+            totalPrice.innerText = "0";
+          }
+        });
+
+        document
+          .getElementById("loadMoreReviews")
+          .addEventListener("click", function () {
+            const hiddenReviews = document.querySelectorAll(".review.d-none");
+            hiddenReviews.forEach((review) =>
+              review.classList.remove("d-none")
+            );
+            this.style.display = "none";
+          });
+
+        const bookingButtons = document.querySelectorAll(
+          "[data-bs-target='#bookingModal']"
+        );
+        // const modalCarName = document.getElementById("modalCarName");
+        const modalPrice = document.getElementById("modalPrice");
+        const rentalDaysInput = document.getElementById("rentalDays");
+        const totalRent = document.getElementById("totalRent");
+
+        let currentPrice = 0;
+
+        bookingButtons.forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const car = btn.getAttribute("data-car");
+            const price = parseInt(btn.getAttribute("data-price"));
+            currentPrice = price;
+            modalCarName.textContent = car;
+            modalPrice.textContent = price;
+            rentalDaysInput.value = "";
+            totalRent.textContent = "0";
+          });
+        });
+
+        rentalDaysInput.addEventListener("input", () => {
+          const days = parseInt(rentalDaysInput.value) || 0;
+          totalRent.textContent = currentPrice * days;
+        });
+
+        // // You can later use this form for real booking API
+        // document
+        //   .getElementById("bookingForm")
+        //   .addEventListener("submit", function (e) {
+        //     e.preventDefault();
+        //     alert(
+        //       `Booking request sent for ${modalCarName.value} for ${rentalDays.value} days. Total: ₹${totalPrice.innerText}`
+        //     );
+        //   });
+      });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>
